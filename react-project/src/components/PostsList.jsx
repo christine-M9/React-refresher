@@ -20,9 +20,15 @@ function PostsList({isPosting, onStopPosting}){
 
     return(
       <>
-      {isPosting ? <Modal onClose={onStopPosting}>
-        <Newpost onBodyChange={bodyChangeHandler} onAuthorChange={authorChangeHandler} />
-        </Modal> : null}
+      {isPosting && (
+         <Modal onClose={onStopPosting}>
+        <Newpost 
+        onBodyChange={bodyChangeHandler} 
+        onAuthorChange={authorChangeHandler}
+        onCancel={onStopPosting} 
+        />
+        </Modal>
+        )};
       
         <ul className={classes.posts}>
           <Post author={enteredAuthor} body={enteredBody} />
