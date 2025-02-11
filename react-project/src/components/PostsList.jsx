@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Post from "./Post";
 import Newpost from "./NewPost";
@@ -8,6 +8,16 @@ import classes from "./PostsList.module.css";
 function PostsList({ isPosting, onStopPosting }) {
   const [posts, setPosts] = useState([]);
 
+  useEffect(() => {
+    async function fetchPosts() {
+      const response = await fetch("http://localhost:3030/posts");
+      const resData = await response.json();
+      setPosts(resData.posts);
+    }
+
+    fetchPosts();
+  }, []);
+
   function addPosthandler(postData) {
     fetch("http://localhost:3030/posts", {
       method: "POST",
@@ -15,12 +25,9 @@ function PostsList({ isPosting, onStopPosting }) {
       headers: {
         "content-Type": "application/json",
       },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setPosts((existingPosts) => [postData, ...existingPosts]);
-      })
-      .catch((error) => console.error("Error:", error));
+    });
+
+    setPosts((existingPosts) => [postData, ...existingPosts]);
   }
   return (
     <>
